@@ -1,6 +1,8 @@
 import os
 import shutil
 
+from cached_task.cache.cache import file_sha256
+
 
 class BlobStore:
     def __contains__(self, store_file_name: str) -> bool:
@@ -18,6 +20,12 @@ class BlobStore:
 
     def restore_file(self, store_file_name: str, file_path: str) -> None:
         store_path = self._store_path(store_file_name)
+
+        # if the files already are the same, we don't copy anything
+        if os.path.isfile(file_path) and \
+            file_sha256(store_path).digest() == file_sha256(file_path).digest():
+            return
+
         dir_name = os.path.dirname(file_path)
 
         if dir_name:

@@ -3,13 +3,9 @@ import glob
 import hashlib
 import inspect
 import textwrap
-from typing import Set, Dict, Callable, List, Iterable
+from typing import Set, Callable, List, Iterable
 
 from cached_task import INPUTS
-
-
-def resolve_inputs(inputs: INPUTS) -> List[str]:
-    return resolve_globs(inputs)
 
 
 def resolve_globs(globs: Iterable[str]) -> List[str]:
@@ -62,7 +58,7 @@ def compute_hash_key(f: Callable, inputs: INPUTS) -> str:
     hash.update(code)
 
     # resolve_inputs returns the files sorted, with only relative paths
-    for input_file in resolve_inputs(inputs):
+    for input_file in resolve_globs(inputs):
         hash.update(input_file.encode('utf-8'))
         hash.update(file_sha256(input_file).digest())
 
