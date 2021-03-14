@@ -1,11 +1,10 @@
 import glob
-import glob
 import hashlib
 import inspect
 import textwrap
 from typing import Set, Callable, List, Iterable
 
-from cached_task import INPUTS
+from cached_task import INPUTS, RESOLVED_PARAMETERS
 
 
 def resolve_globs(globs: Iterable[str]) -> List[str]:
@@ -47,7 +46,9 @@ def file_sha256(input_file: str):
         raise Exception(f"Failure reading {input_file} to compute sha256 digest", e)
 
 
-def compute_hash_key(f: Callable, inputs: INPUTS) -> str:
+def compute_hash_key(f: Callable,
+                     inputs: INPUTS,
+                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
     """
     Computes a hash from the code of the steps, the input file names and their
     content. With this hash, we'll store an entry in the blob store that
@@ -61,5 +62,10 @@ def compute_hash_key(f: Callable, inputs: INPUTS) -> str:
     for input_file in resolve_globs(inputs):
         hash.update(input_file.encode('utf-8'))
         hash.update(file_sha256(input_file).digest())
+
+    # resolved_parameters are strings
+    if resolved_parameters:
+        for resolved_param in resolved_parameters:
+            hash.update(resolved_param.encode("utf-8"))
 
     return hash.hexdigest()

@@ -1,6 +1,6 @@
 from typing import Callable
 
-from cached_task import INPUTS, OUTPUTS
+from cached_task import INPUTS, OUTPUTS, RESOLVED_PARAMETERS
 from cached_task.cache import file_cache
 from cached_task.cache.blob_store import BlobStore
 from cached_task.cache.cache import compute_hash_key, resolve_globs, file_sha256
@@ -11,8 +11,11 @@ class LocalFileCache(file_cache.FileCache):
     def __init__(self) -> None:
         self.blob_store = BlobStore()
 
-    def get_hash_key(self, f: Callable, inputs: INPUTS) -> str:
-        return compute_hash_key(f, inputs)
+    def get_hash_key(self,
+                     f: Callable,
+                     inputs: INPUTS,
+                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
+        return compute_hash_key(f, inputs, resolved_parameters)
 
     def use_cached(self, hash_key: str) -> bool:
         if hash_key not in self.blob_store:

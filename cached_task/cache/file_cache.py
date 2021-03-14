@@ -1,13 +1,18 @@
 import abc
 from typing import Union, Iterable, Optional, Callable
 
-INPUTS = Union[str, Iterable[str]]
+INPUTS = Optional[Union[str, Iterable[str]]]
+PARAMETERS = Optional[Union[str, Iterable[str]]]
+RESOLVED_PARAMETERS = Optional[Iterable[str]]
 OUTPUTS = Optional[Union[str, Iterable[str]]]
 
 
 class FileCache(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def get_hash_key(self, f: Callable, inputs: INPUTS) -> str:
+    def get_hash_key(self,
+                     f: Callable,
+                     inputs: INPUTS,
+                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
         """
         Computes the hash key for the cache for the given function code
         and file glob inputs. The inputs are resolved.
