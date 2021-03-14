@@ -16,7 +16,7 @@ class BlobStore:
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
 
-        return shutil.copyfile(file_path, store_path)
+        shutil.copyfile(file_path, store_path)
 
     def restore_file(self, store_file_name: str, file_path: str) -> None:
         store_path = self._store_path(store_file_name)
@@ -33,7 +33,7 @@ class BlobStore:
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
 
-        return shutil.copyfile(store_path, file_path)
+        shutil.copyfile(store_path, file_path)
 
     def store_string(self, store_file_name: str, value: str) -> None:
         store_path = self._store_path(store_file_name)

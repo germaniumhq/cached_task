@@ -1,5 +1,5 @@
 import re
-from typing import List, Any, Dict, Tuple, Optional
+from typing import Any, Dict, Tuple, Optional, Iterable
 
 from cached_task import RESOLVED_PARAMETERS, PARAMETERS, OUTPUTS
 
@@ -38,7 +38,7 @@ def resolve_cache_parameters(
 
 def get_output_names(
     outputs: OUTPUTS, args: Tuple[Any, ...], kw: Dict[str, Any]
-) -> Optional[List[str]]:
+) -> Optional[Iterable[str]]:
     """
     Creates the glob expressions from the given input parameters.
     """

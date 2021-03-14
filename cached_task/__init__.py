@@ -1,5 +1,5 @@
 import functools
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Optional
 
 from cached_task.cache.file_cache import (
     FileCache,
@@ -18,16 +18,16 @@ current_cache: FileCache = LocalFileCache()
 
 def cached(
     inputs: INPUTS = None, params: PARAMETERS = None, outputs: OUTPUTS = None
-) -> Callable[..., Callable[..., T]]:
+) -> Callable[..., Callable[..., Optional[T]]]:
     """
     Invokes the code only if the inputs are not already cached. If they're cached,
     the files are simply written from the cache, and the wrapped function is not
     invoked.
     """
 
-    def wrapper_builder(f: Callable[..., T]) -> Callable[..., T]:
+    def wrapper_builder(f: Callable[..., Optional[T]]) -> Callable[..., Optional[T]]:
         @functools.wraps(f)
-        def wrapper(*args, **kw) -> T:
+        def wrapper(*args, **kw) -> Optional[T]:
             resolved_parameters = resolve_cache_parameters(params, args, kw)
             hash_key = current_cache.get_hash_key(f, inputs, resolved_parameters)
             if current_cache.use_cached(hash_key):

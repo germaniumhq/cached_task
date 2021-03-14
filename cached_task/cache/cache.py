@@ -1,13 +1,14 @@
 import glob
 import hashlib
 import inspect
+import io
 import textwrap
-from typing import Set, Callable, List, Iterable
+from typing import Set, Callable, List, Iterable, Optional
 
 from cached_task import INPUTS, RESOLVED_PARAMETERS
 
 
-def resolve_globs(globs: Iterable[str]) -> List[str]:
+def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
     result: Set[str] = set()
 
     if not globs:
@@ -37,7 +38,7 @@ def file_sha256(input_file: str):
         hash = hashlib.sha256()
         data = bytearray(4096)
 
-        with open(input_file, "rb") as f:
+        with io.FileIO(input_file, "rb") as f:
             while readed_bytes := f.readinto(data):
                 hash.update(data[:readed_bytes])
 
