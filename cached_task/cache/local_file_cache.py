@@ -11,10 +11,9 @@ class LocalFileCache(file_cache.FileCache):
     def __init__(self) -> None:
         self.blob_store = BlobStore()
 
-    def get_hash_key(self,
-                     f: Callable,
-                     inputs: INPUTS,
-                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
+    def get_hash_key(
+        self, f: Callable, inputs: INPUTS, resolved_parameters: RESOLVED_PARAMETERS
+    ) -> str:
         return compute_hash_key(f, inputs, resolved_parameters)
 
     def use_cached(self, hash_key: str) -> bool:

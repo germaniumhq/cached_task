@@ -9,10 +9,9 @@ OUTPUTS = Optional[Union[str, Iterable[str]]]
 
 class FileCache(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def get_hash_key(self,
-                     f: Callable,
-                     inputs: INPUTS,
-                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
+    def get_hash_key(
+        self, f: Callable, inputs: INPUTS, resolved_parameters: RESOLVED_PARAMETERS
+    ) -> str:
         """
         Computes the hash key for the cache for the given function code
         and file glob inputs. The inputs are resolved.

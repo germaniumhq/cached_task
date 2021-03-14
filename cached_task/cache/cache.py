@@ -37,7 +37,7 @@ def file_sha256(input_file: str):
         hash = hashlib.sha256()
         data = bytearray(4096)
 
-        with open(input_file, 'rb') as f:
+        with open(input_file, "rb") as f:
             while readed_bytes := f.readinto(data):
                 hash.update(data[:readed_bytes])
 
@@ -46,21 +46,21 @@ def file_sha256(input_file: str):
         raise Exception(f"Failure reading {input_file} to compute sha256 digest", e)
 
 
-def compute_hash_key(f: Callable,
-                     inputs: INPUTS,
-                     resolved_parameters: RESOLVED_PARAMETERS) -> str:
+def compute_hash_key(
+    f: Callable, inputs: INPUTS, resolved_parameters: RESOLVED_PARAMETERS
+) -> str:
     """
     Computes a hash from the code of the steps, the input file names and their
     content. With this hash, we'll store an entry in the blob store that
     points to a serialized cached output.
     """
     hash = hashlib.sha256()
-    code = textwrap.dedent(inspect.getsource(f)).encode('utf-8')
+    code = textwrap.dedent(inspect.getsource(f)).encode("utf-8")
     hash.update(code)
 
     # resolve_inputs returns the files sorted, with only relative paths
     for input_file in resolve_globs(inputs):
-        hash.update(input_file.encode('utf-8'))
+        hash.update(input_file.encode("utf-8"))
         hash.update(file_sha256(input_file).digest())
 
     # resolved_parameters are strings

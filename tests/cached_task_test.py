@@ -9,7 +9,7 @@ from cached_task import cached
 
 class Context:
     def __init__(self, name: str) -> None:
-        self.nested = { "name": name }
+        self.nested = {"name": name}
 
 
 class CachedTaskTest(unittest.TestCase):
@@ -33,9 +33,11 @@ class CachedTaskTest(unittest.TestCase):
         self.assertEqual(1, self.executed_count)
 
     def test_cache_outputs_get_cached(self):
-        @cached(inputs="simple.txt",
-                params="args[0].nested['name']",
-                outputs="simple-out-{args[0].nested['name']}.txt")
+        @cached(
+            inputs="simple.txt",
+            params="args[0].nested['name']",
+            outputs="simple-out-{args[0].nested['name']}.txt",
+        )
         def cached_code(context: Context):
             self.executed_count += 1
             with open(f"simple-out-{context.nested['name']}.txt", "wt") as f:

@@ -3,10 +3,12 @@ from typing import List, Any, Dict, Tuple, Optional
 
 from cached_task import RESOLVED_PARAMETERS, PARAMETERS, OUTPUTS
 
-VARIABLE_RE = re.compile(r'{(.*?)}')
+VARIABLE_RE = re.compile(r"{(.*?)}")
 
 
-def resolve_cache_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw: Dict[str, Any]) -> RESOLVED_PARAMETERS:
+def resolve_cache_parameters(
+    input_params: PARAMETERS, args: Tuple[Any, ...], kw: Dict[str, Any]
+) -> RESOLVED_PARAMETERS:
     """
     Resolves the values of the parameters to be cached, against
     the actual parameters of the call.
@@ -15,8 +17,10 @@ def resolve_cache_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw
         return None
 
     if not kw and not args:
-        raise Exception(f"Unable to resolve parameters {input_params}, since no params "
-                        f"are available for the function.")
+        raise Exception(
+            f"Unable to resolve parameters {input_params}, since no params "
+            f"are available for the function."
+        )
 
     if isinstance(input_params, str):
         input_params = [input_params]
@@ -32,7 +36,9 @@ def resolve_cache_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw
     return result
 
 
-def get_output_names(outputs: OUTPUTS, args: Tuple[Any, ...], kw: Dict[str, Any]) -> Optional[List[str]]:
+def get_output_names(
+    outputs: OUTPUTS, args: Tuple[Any, ...], kw: Dict[str, Any]
+) -> Optional[List[str]]:
     """
     Creates the glob expressions from the given input parameters.
     """

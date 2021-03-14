@@ -22,8 +22,10 @@ class BlobStore:
         store_path = self._store_path(store_file_name)
 
         # if the files already are the same, we don't copy anything
-        if os.path.isfile(file_path) and \
-            file_sha256(store_path).digest() == file_sha256(file_path).digest():
+        if (
+            os.path.isfile(file_path)
+            and file_sha256(store_path).digest() == file_sha256(file_path).digest()
+        ):
             return
 
         dir_name = os.path.dirname(file_path)

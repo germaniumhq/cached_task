@@ -7,7 +7,7 @@ class CachedOutputs:
         self.files: Dict[str, str] = dict()  # file full relative path -> blob hash
 
     @classmethod
-    def from_string(cls, cached_outputs_str) -> 'CachedOutputs':
+    def from_string(cls, cached_outputs_str) -> "CachedOutputs":
         result = CachedOutputs()
         result.files = yaml.safe_load(cached_outputs_str)
 
