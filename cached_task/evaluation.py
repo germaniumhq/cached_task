@@ -3,10 +3,13 @@ from typing import List, Any, Dict, Tuple, Optional
 
 from cached_task import RESOLVED_PARAMETERS, PARAMETERS, OUTPUTS
 
+VARIABLE_RE = re.compile(r'{(.*?)}')
 
-def resolve_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw: Dict[str, Any]) -> RESOLVED_PARAMETERS:
+
+def resolve_cache_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw: Dict[str, Any]) -> RESOLVED_PARAMETERS:
     """
-    Resolves the parameters against the current parameters called.
+    Resolves the values of the parameters to be cached, against
+    the actual parameters of the call.
     """
     if not input_params:
         return None
@@ -16,7 +19,7 @@ def resolve_parameters(input_params: PARAMETERS, args: Tuple[Any, ...], kw: Dict
                         f"are available for the function.")
 
     if isinstance(input_params, str):
-        input_params = [ input_params ]
+        input_params = [input_params]
 
     result = []
 
@@ -39,6 +42,16 @@ def get_output_names(outputs: OUTPUTS, args: Tuple[Any, ...], kw: Dict[str, Any]
     if isinstance(outputs, str):
         outputs = [outputs]
 
+    found_variable_output_name = False
+
+    for output in outputs:
+        if "{" in output:
+            found_variable_output_name = True
+            break
+
+    if not found_variable_output_name:
+        return outputs
+
     result = []
     context = dict(kw)
     context["args"] = args
@@ -46,11 +59,8 @@ def get_output_names(outputs: OUTPUTS, args: Tuple[Any, ...], kw: Dict[str, Any]
     def replace_function(m):
         return str(eval(m.group(1), context, context))
 
-    VARIABLE_RE = re.compile(r'{(.*?)}')
-
     for output in outputs:
         output_replaced = VARIABLE_RE.sub(replace_function, output)
         result.append(output_replaced)
 
     return result
-

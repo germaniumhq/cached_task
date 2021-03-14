@@ -3,7 +3,7 @@ from typing import Callable, TypeVar
 
 from cached_task.cache.file_cache import FileCache, INPUTS, OUTPUTS, RESOLVED_PARAMETERS, PARAMETERS
 from cached_task.cache.local_file_cache import LocalFileCache
-from cached_task.evaluation import resolve_parameters, get_output_names
+from cached_task.evaluation import resolve_cache_parameters, get_output_names
 
 T = TypeVar('T')
 
@@ -22,7 +22,7 @@ def cached(
     def wrapper_builder(f: Callable[..., T]) -> Callable[..., T]:
         @functools.wraps(f)
         def wrapper(*args, **kw) -> T:
-            resolved_parameters = resolve_parameters(params, args, kw)
+            resolved_parameters = resolve_cache_parameters(params, args, kw)
             hash_key = current_cache.get_hash_key(f, inputs, resolved_parameters)
             if current_cache.use_cached(hash_key):
                 return None
