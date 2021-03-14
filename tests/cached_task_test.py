@@ -23,7 +23,7 @@ class CachedTaskTest(unittest.TestCase):
             os.remove("simple-out.txt")
 
     def test_cache_create_marker(self):
-        @cached(input_files=["simple.txt"])
+        @cached(inputs=["simple.txt"])
         def cached_code():
             self.executed_count += 1
 
@@ -33,8 +33,8 @@ class CachedTaskTest(unittest.TestCase):
         self.assertEqual(1, self.executed_count)
 
     def test_cache_outputs_get_cached(self):
-        @cached(input_files="simple.txt",
-                input_params="args[0].nested['name']",
+        @cached(inputs="simple.txt",
+                params="args[0].nested['name']",
                 outputs="simple-out-{args[0].nested['name']}.txt")
         def cached_code(context: Context):
             self.executed_count += 1
