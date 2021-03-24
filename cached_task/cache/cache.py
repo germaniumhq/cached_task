@@ -9,6 +9,11 @@ from cached_task import INPUTS, RESOLVED_PARAMETERS
 
 
 def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
+    """
+    Resolve a bunch of globs to an actual list of files. You
+    can also exclude files from the set by prefixing the
+    expression with `!`.
+    """
     result: Set[str] = set()
 
     if not globs:
@@ -19,10 +24,16 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
 
     for glob_path in globs:
         found_items = False
+        is_glob_exclude = glob_path.startswith("!")
+        glob_expression = glob_path[1:] if is_glob_exclude else glob_path
 
-        for file_name in glob.iglob(glob_path):
+        for file_name in glob.iglob(glob_expression):
             found_items = True
-            result.add(file_name)
+
+            if is_glob_exclude:
+                result.remove(file_name)
+            else:
+                result.add(file_name)
 
         if not found_items:
             raise Exception(f"No files were given for glob {glob_path}")
