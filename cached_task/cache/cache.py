@@ -40,8 +40,10 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
                 raise Exception(f"{file_name} not found in {result}", e)
 
         if not found_items:
-            raise Exception(f"No files were given for glob {glob_path} "
-                            f"(expression: {glob_expression})")
+            raise Exception(
+                f"No files were given for glob {glob_path} "
+                f"(expression: {glob_expression})"
+            )
 
     items = list(result)
     items.sort()
