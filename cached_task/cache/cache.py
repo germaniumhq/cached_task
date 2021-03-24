@@ -27,16 +27,21 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
         is_glob_exclude = glob_path.startswith("!")
         glob_expression = glob_path[1:] if is_glob_exclude else glob_path
 
-        for file_name in glob.iglob(glob_expression):
+        for file_name in glob.iglob(glob_expression, recursive=True):
             found_items = True
 
-            if is_glob_exclude:
-                result.remove(file_name)
-            else:
+            if not is_glob_exclude:
                 result.add(file_name)
+                continue
+
+            try:
+                result.remove(file_name)
+            except KeyError as e:
+                raise Exception(f"{file_name} not found in {result}", e)
 
         if not found_items:
-            raise Exception(f"No files were given for glob {glob_path}")
+            raise Exception(f"No files were given for glob {glob_path} "
+                            f"(expression: {glob_expression})")
 
     items = list(result)
     items.sort()
