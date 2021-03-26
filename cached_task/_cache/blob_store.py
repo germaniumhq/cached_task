@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from cached_task.cache.cache import file_sha256
+from cached_task._cache.cache import file_sha256
 
 
 class BlobStore:

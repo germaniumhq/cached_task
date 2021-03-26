@@ -25,7 +25,11 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
     for glob_path in globs:
         found_items = False
         is_glob_exclude = glob_path.startswith("!")
-        glob_expression = glob_path[1:] if is_glob_exclude else glob_path
+        is_glob_optional = glob_path.startswith("?") or is_glob_exclude
+
+        glob_expression = (
+            glob_path[1:] if is_glob_exclude or is_glob_optional else glob_path
+        )
 
         for file_name in glob.iglob(glob_expression, recursive=True):
             found_items = True
@@ -39,7 +43,7 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
             except KeyError as e:
                 raise Exception(f"{file_name} not found in {result}", e)
 
-        if not found_items:
+        if not found_items and not is_glob_optional:
             raise Exception(
                 f"No files were given for glob {glob_path} "
                 f"(expression: {glob_expression})"

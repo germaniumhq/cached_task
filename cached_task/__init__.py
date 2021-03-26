@@ -1,14 +1,14 @@
 import functools
 from typing import Callable, TypeVar, Optional
 
-from cached_task.cache.file_cache import (
+from cached_task._cache.file_cache import (
     FileCache,
     INPUTS,
     OUTPUTS,
     RESOLVED_PARAMETERS,
     PARAMETERS,
 )
-from cached_task.cache.local_file_cache import LocalFileCache
+from cached_task._cache.local_file_cache import LocalFileCache
 from cached_task.evaluation import resolve_cache_parameters, get_output_names
 
 T = TypeVar("T")

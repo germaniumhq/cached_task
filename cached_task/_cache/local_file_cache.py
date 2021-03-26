@@ -1,10 +1,10 @@
 from typing import Callable
 
 from cached_task import INPUTS, OUTPUTS, RESOLVED_PARAMETERS
-from cached_task.cache import file_cache
-from cached_task.cache.blob_store import BlobStore
-from cached_task.cache.cache import compute_hash_key, resolve_globs, file_sha256
-from cached_task.cache.cached_outputs import CachedOutputs
+from cached_task._cache import file_cache
+from cached_task._cache.blob_store import BlobStore
+from cached_task._cache.cache import compute_hash_key, resolve_globs, file_sha256
+from cached_task._cache.cached_outputs import CachedOutputs
 
 
 class LocalFileCache(file_cache.FileCache):

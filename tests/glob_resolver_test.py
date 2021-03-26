@@ -1,6 +1,6 @@
 import unittest
 
-from cached_task.cache.cache import resolve_globs
+from cached_task._cache.cache import resolve_globs
 
 
 class GlobResolverTest(unittest.TestCase):
