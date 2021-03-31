@@ -17,7 +17,9 @@ current_cache: FileCache = LocalFileCache()
 
 
 def cached(
-    inputs: INPUTS = None, params: PARAMETERS = None, outputs: OUTPUTS = None
+    inputs: INPUTS = None,
+    params: PARAMETERS = None,
+    outputs: OUTPUTS = None,
 ) -> Callable[..., Callable[..., Optional[T]]]:
     """
     Invokes the code only if the inputs are not already cached. If they're cached,

@@ -2,10 +2,15 @@ import glob
 import hashlib
 import inspect
 import io
+import os
 import textwrap
 from typing import Set, Callable, List, Iterable, Optional
+import logging
 
 from cached_task import INPUTS, RESOLVED_PARAMETERS
+
+
+LOG = logging.Logger(__name__)
 
 
 def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
@@ -34,6 +39,9 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
         for file_name in glob.iglob(glob_expression, recursive=True):
             found_items = True
 
+            if os.path.isdir(file_name):
+                continue
+
             if not is_glob_exclude:
                 result.add(file_name)
                 continue
@@ -41,7 +49,7 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
             try:
                 result.remove(file_name)
             except KeyError as e:
-                raise Exception(f"{file_name} not found in {result}", e)
+                LOG.info(f"{file_name} not found in {result}", e)
 
         if not found_items and not is_glob_optional:
             raise Exception(
