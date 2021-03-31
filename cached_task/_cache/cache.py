@@ -39,7 +39,9 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
         for file_name in glob.iglob(glob_expression, recursive=True):
             found_items = True
 
-            if os.path.isdir(file_name):
+            # Optional files should be optional, so not existing. This means we shouldn't
+            # try to read hashes out of them later.
+            if not os.path.exists(file_name) and is_glob_optional:
                 continue
 
             if not is_glob_exclude:

@@ -8,7 +8,7 @@ packages = find_packages()
 
 setup(
     name="cached_task",
-    version="2021.3.11",
+    version="2021.3.12",
     description="cached_task",
     long_description=readme,
     author="Bogdan Mustiata",
