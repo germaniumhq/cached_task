@@ -44,6 +44,10 @@ def resolve_globs(globs: Optional[Iterable[str]]) -> List[str]:
             if not os.path.exists(file_name) and is_glob_optional:
                 continue
 
+            # Folder entries are ignored, since there's nothing to hash.
+            if os.path.isdir(file_name):
+                continue
+
             if not is_glob_exclude:
                 result.add(file_name)
                 continue
